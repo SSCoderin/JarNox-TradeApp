@@ -214,7 +214,7 @@ const Dashboard = () => {
     const connectWebSocket = () => {
       try {
         // ws = new WebSocket(`ws://127.0.0.1:8000/ws/live-feed/${currentTicker}`);
-        const ws = new WebSocket(`${import.meta.env.VITE_BASE_URL.replace(/^http/, 'ws')}/ws/live-feed/${currentTicker}`);
+        const ws = new WebSocket(`${import.meta.env.VITE_BASE_URL.replace(/^http/, 'ws').replace(/^https/, 'wss')}/ws/live-feed/${currentTicker}`);
 
 
         ws.onopen = () => {
