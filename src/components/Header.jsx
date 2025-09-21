@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react"; 
 import { Link, useLocation } from "react-router-dom";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { isSignedIn } = useAuth();
 
   const links = [
     { name: "Dashboard", path: "/dashboard" },
@@ -23,6 +32,9 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex space-x-6">
+
+          {isSignedIn && (
+            <>
           {links.map((link) => (
             <Link
               key={link.path}
@@ -34,6 +46,19 @@ export default function Header() {
               {link.name}
             </Link>
           ))}
+          </>
+          )}
+
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="hover:text-green-400 transition">
+                Sign In
+              </button>
+            </SignInButton>
+          </SignedOut>
         </nav>
 
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
