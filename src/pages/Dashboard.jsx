@@ -193,7 +193,7 @@ const Dashboard = () => {
       setBackendError(false);
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/historical/${currentTicker}?period=1mo&interval=1d`
+          `${import.meta.env.VITE_BASE_URL}/api/historical/${currentTicker}?period=1mo&interval=1d`
         );
         console.log("Historical data fetched:", response.data);
         setLoading(false);
@@ -213,7 +213,9 @@ const Dashboard = () => {
     let ws = null;
     const connectWebSocket = () => {
       try {
-        ws = new WebSocket(`ws://127.0.0.1:8000/ws/live-feed/${currentTicker}`);
+        // ws = new WebSocket(`ws://127.0.0.1:8000/ws/live-feed/${currentTicker}`);
+        const ws = new WebSocket(`${import.meta.env.VITE_BASE_URL.replace(/^http/, 'ws')}/ws/live-feed/${currentTicker}`);
+
 
         ws.onopen = () => {
           console.log("WebSocket connected");
@@ -289,7 +291,7 @@ const Dashboard = () => {
     setLoading(true);
     setBackendError(false);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/backtest", {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/backtest`, {
         ticker: currentTicker,
         strategy: "Moving Average Crossover",
       });
@@ -425,7 +427,7 @@ const Dashboard = () => {
                 <span>⚠️</span>
                 <span>
                   Backend connection error. Please ensure your FastAPI server is
-                  running at http://127.0.0.1:8000.
+                  running at ${import.meta.env.VITE_BASE_URL}.
                 </span>
               </div>
             )}
